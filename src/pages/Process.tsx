@@ -24,7 +24,7 @@ import { CONDITION_GRADE_INFO, ACCESSORY_OPTIONS } from '@/types';
 export default function Process() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { getConsignment, confirmValuation, updateConsignmentStatus } = useAppStore();
+  const { getConsignment, confirmValuation, updateConsignmentStatus, completeAppraisal, listToShelf } = useAppStore();
   const [copied, setCopied] = useState(false);
   const [confirming, setConfirming] = useState(false);
 
@@ -73,8 +73,8 @@ export default function Process() {
       await new Promise((r) => setTimeout(r, 600));
       updateConsignmentStatus(consignment.id, 'appraising');
     } else if (consignment.status === 'appraising') {
-      await new Promise((r) => setTimeout(r, 600));
-      updateConsignmentStatus(consignment.id, 'passed');
+      await new Promise((r) => setTimeout(r, 1200));
+      completeAppraisal(consignment.id, true);
     }
   };
 
@@ -522,7 +522,7 @@ export default function Process() {
                     商品通过鉴定，已评定成色等级。即将进入公开货架...
                   </p>
                   <button
-                    onClick={() => updateConsignmentStatus(consignment.id, 'listed')}
+                    onClick={() => listToShelf(consignment.id)}
                     className="btn-gold"
                   >
                     立即上架至公开货架
